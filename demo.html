@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Date Format Patch - Demo</title>
+		<script type="text/javascript" src="./js/date-format.js"></script>
+		<script type="text/javascript">
+			var date1 = new Date(2001, 0, 3, 4, 5, 6, 7);
+			var date2 = new Date(1999, 11, 31, 16, 45, 36, 987);
+		</script>
+		<style>
+			table
+			{
+				margin: 20px auto;
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+
+			table tr td
+			{
+				border: 1px solid black;
+				padding: 5px 7px;
+			}
+
+			table thead tr td
+			{
+				background-color: #e0e0e0;
+				font-weight: bold;
+			}
+
+			table tr.s td
+			{
+				background-color: #f0f0f0;
+				font-weight: bold;
+			}
+
+		</style>
+	</head>
+	<body>
+		<table>
+			<thead>
+
+				<tr><td>Format</td><td><script type="text/javascript"> document.write(date1);</script></td><td><script type="text/javascript"> document.write(date2);</script></td></tr>
+
+			</thead>
+			<tbody>
+
+				<tr class="s"><td colspan="3">Date formats</td></tr>
+				<tr><td>d.M.yy.</td>				<td><script type="text/javascript"> document.write(Date.format(date1, 'd.M.yy.'));				</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'd.M.yy.'));				</script></td></tr>
+				<tr><td>dd.MM.yyyy.</td>			<td><script type="text/javascript"> document.write(Date.format(date1, 'dd.MM.yyyy.'));			</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'dd.MM.yyyy.'));			</script></td></tr>
+				<tr><td>ddd, MMM. d. yyyy.</td>		<td><script type="text/javascript"> document.write(Date.format(date1, 'ddd, MMM. d. yyyy.'));	</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'ddd, MMM. d. yyyy.'));	</script></td></tr>
+				<tr><td>dddd, MMMM d. yyyy.</td>	<td><script type="text/javascript"> document.write(Date.format(date1, 'dddd, MMMM d. yyyy.'));	</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'dddd, MMMM d. yyyy.'));	</script></td></tr>
+
+				<tr class="s"><td colspan="3">Time formats</td></tr>
+				<tr><td>h:m:s.z</td>		<td><script type="text/javascript"> document.write(Date.format(date1, 'h:m:s.z'));			</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'h:m:s.z'));			</script></td></tr>
+				<tr><td>H:m:s.z</td>		<td><script type="text/javascript"> document.write(Date.format(date1, 'H:m:s.z'));			</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'H:m:s.z'));			</script></td></tr>
+				<tr><td>h:m:s.z a</td>		<td><script type="text/javascript"> document.write(Date.format(date1, 'h:m:s.z a'));		</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'h:m:s.z a'));		</script></td></tr>
+				<tr><td>H:m:s.z a</td>		<td><script type="text/javascript"> document.write(Date.format(date1, 'H:m:s.z a'));		</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'H:m:s.z a'));		</script></td></tr>
+				<tr><td>h:m:s.z A</td>		<td><script type="text/javascript"> document.write(Date.format(date1, 'h:m:s.z A'));		</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'h:m:s.z A'));		</script></td></tr>
+				<tr><td>H:m:s.z A</td>		<td><script type="text/javascript"> document.write(Date.format(date1, 'H:m:s.z A'));		</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'H:m:s.z A'));		</script></td></tr>
+				<tr><td>hh:mm:ss.zzz</td>	<td><script type="text/javascript"> document.write(Date.format(date1, 'hh:mm:ss.zzz'));		</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'hh:mm:ss.zzz'));		</script></td></tr>
+				<tr><td>HH:mm:ss.zzz</td>	<td><script type="text/javascript"> document.write(Date.format(date1, 'HH:mm:ss.zzz'));		</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'HH:mm:ss.zzz'));		</script></td></tr>
+				<tr><td>hh:mm:ss.zzz a</td>	<td><script type="text/javascript"> document.write(Date.format(date1, 'hh:mm:ss.zzz a'));	</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'hh:mm:ss.zzz a'));	</script></td></tr>
+				<tr><td>HH:mm:ss.zzz A</td>	<td><script type="text/javascript"> document.write(Date.format(date1, 'HH:mm:ss.zzz A'));	</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'HH:mm:ss.zzz A'));	</script></td></tr>
+				<tr><td>hh:mm:ss.zzz ap</td><td><script type="text/javascript"> document.write(Date.format(date1, 'hh:mm:ss.zzz ap'));	</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'hh:mm:ss.zzz ap'));	</script></td></tr>
+				<tr><td>HH:mm:ss.zzz AP</td><td><script type="text/javascript"> document.write(Date.format(date1, 'HH:mm:ss.zzz AP'));	</script></td>	<td><script type="text/javascript"> document.write(Date.format(date2, 'HH:mm:ss.zzz AP'));	</script></td></tr>
+
+				<tr class="s"><td colspan="3">Your custom format</td></tr>
+				<tr>
+					<td><input id="txtFormat" type="text" onkeyup="customFormat();" style="width: 100%;"></td>
+					<td><input id="txtDate1" type="text" readonly style="width: 100%;"></td>
+					<td><input id="txtDate2" type="text" readonly style="width: 100%;"></td>
+				</tr>
+			</tbody>
+		</table>
+		<script type="text/javascript">
+		function customFormat()
+		{
+			var t1 = document.getElementById('txtDate1');
+			var t2 = document.getElementById('txtDate2');
+			var tf = document.getElementById('txtFormat');
+
+			t1.value = Date.format(date1, tf.value);
+			t2.value = Date.format(date2, tf.value);
+		}
+		</script>
+	</body>
+</html> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
