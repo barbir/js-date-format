@@ -1,6 +1,6 @@
 test
 (
-	'internal methods - member method - toFormattedString(format) - date part',
+	'internal methods - string toFormattedString(format) - member method (date part)',
 	function()
 	{
 		testDate = new Date(2001, 1, 3);
@@ -18,7 +18,7 @@ test
 
 test
 (
-	'internal methods - member method - toFormattedString(format) - time part',
+	'internal methods - string toFormattedString(format) - member method (time part)',
 	function()
 	{
 		testAmDate = new Date(2001, 2, 3, 4, 5, 6, 7);
@@ -52,7 +52,7 @@ test
 
 test
 (
-	'internal methods - static method - format(date, format) - date part',
+	'internal methods - string format(date, format) - static method - (date part)',
 	function()
 	{
 		testDate = new Date(2001, 1, 3);
@@ -70,7 +70,7 @@ test
 
 test
 (
-	'internal methods - static method - format(date, format) - time part',
+	'internal methods - string format(date, format) - static method - (time part)',
 	function()
 	{
 		testAmDate = new Date(2001, 2, 3, 4, 5, 6, 7);
@@ -104,7 +104,7 @@ test
 
 test
 (
-	'internal methods - formatLogic method - pad(value, digits)',
+	'internal methods - string formatLogic.pad(value, digits)',
 	function()
 	{
 
@@ -123,7 +123,7 @@ test
 
 test
 (
-	'internal methods - formatLogic method - convertTo12Hour(value)',
+	'internal methods - int formatLogic.convertTo12Hour(value)',
 	function()
 	{
 		ok(Date.formatLogic.convertTo12Hour(0)	== 12,			'convertTo12Hour(0) string');

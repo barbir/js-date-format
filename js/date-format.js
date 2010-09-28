@@ -1,15 +1,20 @@
 /*
  * ----------------------------------------------------------------------------
- * Package:     Date Format Patch
- * Version:     0.9.0
+ * Package:     JS Date Format Patch
+ * Version:     0.9.9
  * Date:        2010-09-26
  * Description: In lack of decent formatting ability of Javascript Date object,
  *              I have created this "patch" for the Date object which will add 
  *              "Date.format(dateObject, format)" static function, and the 
  *              "dateObject.toFormattedString(format)" member function.
+ *              Along with the formatting abilities, I have also added the 
+ *              following functions for parsing dates:
+ *              "Date.parseFormatted(value, format)" - static function
+ *              "dateObject.fromFormattedString(value, format)" - member 
+ *              function
  * Author:      Miljenko Barbir
  * Author URL:  http://miljenkobarbir.com/
- * Repository:  http://github.com/barbir/void
+ * Repository:  http://github.com/barbir/js-date-format
  * ----------------------------------------------------------------------------
  * Copyright (c) 2010 Miljenko Barbir
  * Dual licensed under the MIT and GPL licenses.
@@ -125,4 +130,165 @@ Date.formatLogic =
 Date.prototype.toFormattedString = function (format)
 {
 	return Date.format(this, format);
+}
+
+// extend the Javascript Date class with the "parseFormatted" static function which
+// will parse the provided string, using the provided format into a valid date object
+Date.parseFormatted = function (value, format)
+{
+	var output		= new Date(2000, 0, 1);
+	var parts		= new Array();
+	parts['d']		= '([0-9][0-9]?)';
+	parts['dd']		= '([0-9][0-9])';
+//	parts['ddd']	= NOT SUPPORTED;
+//	parts['dddd']	= NOT SUPPORTED;
+	parts['M']		= '([0-9][0-9]?)';
+	parts['MM']		= '([0-9][0-9])';
+//	parts['MMM']	= NOT SUPPORTED;
+//	parts['MMMM']	= NOT SUPPORTED;
+	parts['yyyy']	= '([0-9][0-9][0-9][0-9])';
+	parts['yyy']	= '([0-9][0-9])[y]';
+	parts['yy']		= '([0-9][0-9])';
+	parts['H']		= '([0-9][0-9]?)';
+	parts['hh']		= '([0-9][0-9])';
+	parts['h']		= '([0-9][0-9]?)';
+	parts['HH']		= '([0-9][0-9])';
+	parts['m']		= '([0-9][0-9]?)';
+	parts['mm']		= '([0-9][0-9])';
+	parts['s']		= '([0-9][0-9]?)';
+	parts['ss']		= '([0-9][0-9])';
+	parts['z']		= '([0-9][0-9]?[0-9]?)';
+	parts['zz']		= '([0-9][0-9]?[0-9]?)[z]';
+	parts['zzz']	= '([0-9][0-9][0-9])';
+	parts['ap']		= '([ap][m])';
+	parts['a']		= '([ap][m])';
+	parts['AP']		= '([AP][M])';
+	parts['A']		= '([AP][M])';
+
+	var _ = Date.parseLogic;
+
+	// parse the input format, char by char
+	var i = 0;
+	var regex = "";
+	var outputs = new Array("");
+
+	// parse the format to get the extraction regex
+	while (i < format.length)
+	{
+		token = format.charAt(i);
+		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] != null)
+			token += format.charAt(++i);
+
+		if (parts[token] != null)
+		{
+			regex += parts[token];
+			outputs[outputs.length] = token;
+		}
+		else
+			regex += token;
+
+		i++;
+	}
+
+	// extract matches
+	var r = RegExp(regex);
+	matches = value.match(r);
+
+	if(matches == null || matches.length != outputs.length)
+		return null;
+
+	// parse each match and update the output date object
+	for(var i = 0; i < outputs.length; i++)
+	{
+		if(outputs[i] != '')
+		{
+			switch(outputs[i])
+			{
+				case 'yyyy':
+				case 'yyy':
+					output.setYear(_.parseInt(matches[i]));
+					break;
+
+				case 'yy':
+					output.setYear(2000 + _.parseInt(matches[i]));
+					break;
+
+				case 'MM':
+				case 'M':
+					output.setMonth(_.parseInt(matches[i]) - 1);
+					break;
+
+				case 'dd':
+				case 'd':
+					output.setDate(_.parseInt(matches[i]));
+					break;
+
+				case 'hh':
+				case 'h':
+				case 'HH':
+				case 'H':
+					output.setHours(_.parseInt(matches[i]));
+					break;
+
+				case 'mm':
+				case 'm':
+					output.setMinutes(_.parseInt(matches[i]));
+					break;
+
+				case 'ss':
+				case 's':
+					output.setSeconds(_.parseInt(matches[i]));
+					break;
+
+				case 'zzz':
+				case 'zz':
+				case 'z':
+					output.setMilliseconds(_.parseInt(matches[i]));
+					break;
+
+				case 'AP':
+				case 'A':
+				case 'ap':
+				case 'a':
+					if((matches[i] == 'PM' || matches[i] == 'pm') && (output.getHours() < 12))
+						output.setHours(output.getHours() + 12)
+					if((matches[i] == 'AM' || matches[i] == 'am') && (output.getHours() == 12))
+						output.setHours(0)
+					break;
+			}
+		}
+	}
+
+	return output;
+};
+
+// this is the parse logic helper object that contains the helper functions
+Date.parseLogic = 
+{
+	unpad: function (value)
+	{
+		var output = value;
+
+		while(output.length > 1)
+		{
+			if(output[0] == '0')
+				output = output.substring(1, output.length)
+			else
+				break;
+		}
+
+		return output;
+	},
+	parseInt: function (value)
+	{
+		return parseInt(this.unpad(value));
+	}
+} 
+
+// add a member "from" function which will return the date object, created
+// from the provided string and the format
+Date.prototype.fromFormattedString = function(value, format)
+{
+	this.setTime(Date.parseFormatted(value, format).getTime());
+	return this;
 }
