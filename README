@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------------
-Javascript Date Format Patch 0.9.0
+Javascript Date Format Patch 0.9.9
 ------------------------------------------------------------------------------------------------
 
 About
@@ -8,8 +8,11 @@ In lack of decent formatting ability of Javascript Date object, I have created t
 the Date object which will add the following functions:
  * Date.format(dateObject, format)
  * dateObject.toFormattedString(format)
+ * Date.parseFormatted(value, format)
+ * dateObject.fromFormattedString(value, format)
 
-Both of these will allow you to convert dates to strings in your desired format.
+First two will allow you to convert dates to strings in your desired format.
+The other two will allow you to parse a date from a string in a desired format.
 
 Licence
 -------
@@ -27,5 +30,12 @@ Date.format(d, 'dd.MM.yyyy. HH:mm:ss.zzz');	// "03.02.2001. 04:05:06.007"
 
 // Date object member function call
 d.toFormattedString('yyyy-MM-dd');		// "2001-02-03"
+
+// Date object static function call - will return a valid Date object
+d = Date.parseFormatted('03.02.2001. 04:05:06.007', 'dd.MM.yyyy. HH:mm:ss.zzz');
+
+// Date object member function call - will update the calling object with the
+//                                    provided value
+d.fromFormattedString('2001-02-03', 'yyyy-MM-dd');
 
 ------------------------------------------------------------------------------------------------
