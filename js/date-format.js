@@ -1,8 +1,8 @@
 /*
  * ----------------------------------------------------------------------------
  * Package:     JS Date Format Patch
- * Version:     0.9.10
- * Date:        2012-04-06
+ * Version:     0.9.11
+ * Date:        2012-04-12
  * Description: In lack of decent formatting ability of Javascript Date object,
  *              I have created this "patch" for the Date object which will add 
  *              "Date.format(dateObject, format)" static function, and the 
@@ -68,12 +68,13 @@ Date.format = function (date, format)
 	while (i < format.length)
 	{
 		token = format.charAt(i);
-		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== null)
+		
+		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== undefined)
 		{
 			token += format.charAt(++i);
 		}
 
-		if (parts[token] !== null)
+		if (parts[token] !== undefined)
 		{
 			output += parts[token];
 		}
@@ -186,12 +187,12 @@ Date.parseFormatted = function (value, format)
 	while (i < format.length)
 	{
 		token = format.charAt(i);
-		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== null)
+		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== undefined)
 		{
 			token += format.charAt(++i);
 		}
 
-		if (parts[token] !== null)
+		if (parts[token] !== undefined)
 		{
 			regex += parts[token];
 			outputs[outputs.length] = token;
@@ -208,9 +209,9 @@ Date.parseFormatted = function (value, format)
 	var r = new RegExp(regex);
 	var matches = value.match(r);
 
-	if(matches === null || matches.length !== outputs.length)
+	if(matches === undefined || matches.length !== outputs.length)
 	{
-		return null;
+		return undefined;
 	}
 
 	// parse each match and update the output date object
