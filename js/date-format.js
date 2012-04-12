@@ -1,8 +1,8 @@
 /*
  * ----------------------------------------------------------------------------
  * Package:     JS Date Format Patch
- * Version:     0.9.9
- * Date:        2010-09-26
+ * Version:     0.9.10
+ * Date:        2012-04-06
  * Description: In lack of decent formatting ability of Javascript Date object,
  *              I have created this "patch" for the Date object which will add 
  *              "Date.format(dateObject, format)" static function, and the 
@@ -29,10 +29,10 @@ Date.format = function (date, format)
 	var formatLogic = Date.formatLogic;
 
 	// check if the AM/PM option is used
-	var isAmPm		= (format.indexOf("a") != -1) || (format.indexOf("A") != -1);
+	var isAmPm		= (format.indexOf("a") !== -1) || (format.indexOf("A") !== -1);
 
 	// prepare all the parts of the date that can be used in the format
-	var parts		= new Array();
+	var parts		= [];
 	parts['d']		= date.getDate();
 	parts['dd']		= formatLogic.pad(parts['d'], 2);
 	parts['ddd']	= formatLogic.i18n.shortDayNames[date.getDay()];
@@ -64,16 +64,23 @@ Date.format = function (date, format)
 	// parse the input format, char by char
 	var i = 0;
 	var output = "";
+	var token = "";
 	while (i < format.length)
 	{
 		token = format.charAt(i);
-		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] != null)
+		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== null)
+		{
 			token += format.charAt(++i);
+		}
 
-		if (parts[token] != null)
+		if (parts[token] !== null)
+		{
 			output += parts[token];
+		}
 		else
+		{
 			output += token;
+		}
 
 		i++;
 	}
@@ -93,7 +100,9 @@ Date.formatLogic =
 		var zeros = "";
 
 		if(digits < 1)
+		{
 			return "";
+		}
 
 		for(var i = 0; i < digits; i++)
 		{
@@ -112,7 +121,7 @@ Date.formatLogic =
 	// convert the 24 hour style value to a 12 hour style value
 	convertTo12Hour: function (value)
 	{
-		return value % 12 == 0 ? 12 : value % 12;
+		return value % 12 === 0 ? 12 : value % 12;
 	},
 
 	// internationalization settings
@@ -123,21 +132,21 @@ Date.formatLogic =
 		monthNames:			['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 		shortMonthNames:	['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 	}
-}
+};
 
 // add a member "format" function which will return the string representation
 // of the current object formatted using the provided format string
 Date.prototype.toFormattedString = function (format)
 {
 	return Date.format(this, format);
-}
+};
 
 // extend the Javascript Date class with the "parseFormatted" static function which
 // will parse the provided string, using the provided format into a valid date object
 Date.parseFormatted = function (value, format)
 {
 	var output		= new Date(2000, 0, 1);
-	var parts		= new Array();
+	var parts		= [];
 	parts['d']		= '([0-9][0-9]?)';
 	parts['dd']		= '([0-9][0-9])';
 //	parts['ddd']	= NOT SUPPORTED;
@@ -171,36 +180,43 @@ Date.parseFormatted = function (value, format)
 	var i = 0;
 	var regex = "";
 	var outputs = new Array("");
+	var token = "";
 
 	// parse the format to get the extraction regex
 	while (i < format.length)
 	{
 		token = format.charAt(i);
-		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] != null)
+		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== null)
+		{
 			token += format.charAt(++i);
+		}
 
-		if (parts[token] != null)
+		if (parts[token] !== null)
 		{
 			regex += parts[token];
 			outputs[outputs.length] = token;
 		}
 		else
+		{
 			regex += token;
+		}
 
 		i++;
 	}
 
 	// extract matches
-	var r = RegExp(regex);
-	matches = value.match(r);
+	var r = new RegExp(regex);
+	var matches = value.match(r);
 
-	if(matches == null || matches.length != outputs.length)
+	if(matches === null || matches.length !== outputs.length)
+	{
 		return null;
+	}
 
 	// parse each match and update the output date object
-	for(var i = 0; i < outputs.length; i++)
+	for(i = 0; i < outputs.length; i++)
 	{
-		if(outputs[i] != '')
+		if(outputs[i] !== '')
 		{
 			switch(outputs[i])
 			{
@@ -250,10 +266,15 @@ Date.parseFormatted = function (value, format)
 				case 'A':
 				case 'ap':
 				case 'a':
-					if((matches[i] == 'PM' || matches[i] == 'pm') && (output.getHours() < 12))
-						output.setHours(output.getHours() + 12)
-					if((matches[i] == 'AM' || matches[i] == 'am') && (output.getHours() == 12))
-						output.setHours(0)
+					if((matches[i] === 'PM' || matches[i] === 'pm') && (output.getHours() < 12))
+					{
+						output.setHours(output.getHours() + 12);
+					}
+
+					if((matches[i] === 'AM' || matches[i] === 'am') && (output.getHours() === 12))
+					{
+						output.setHours(0);
+					}
 					break;
 			}
 		}
@@ -271,19 +292,23 @@ Date.parseLogic =
 
 		while(output.length > 1)
 		{
-			if(output[0] == '0')
-				output = output.substring(1, output.length)
+			if(output[0] === '0')
+			{
+				output = output.substring(1, output.length);
+			}
 			else
+			{
 				break;
+			}
 		}
 
 		return output;
 	},
 	parseInt: function (value)
 	{
-		return parseInt(this.unpad(value));
+		return parseInt(this.unpad(value), 10);
 	}
-} 
+};
 
 // add a member "from" function which will return the date object, created
 // from the provided string and the format
@@ -291,4 +316,4 @@ Date.prototype.fromFormattedString = function(value, format)
 {
 	this.setTime(Date.parseFormatted(value, format).getTime());
 	return this;
-}
+};
