@@ -190,7 +190,7 @@
     			token += format.charAt(++i);
     		}
     
-    		if (parts[token] !== undefined)
+    		if (parts[token])
     		{
     			regex += parts[token];
     			outputs.push(token);
@@ -204,78 +204,74 @@
     	// extract matches
     	var r = new RegExp(regex);
     	var matches = value.match(r);
+        //Remove first match that is equals value
         matches.shift();
-    
-    	if(matches === undefined || matches.length !== outputs.length)
-    	{
-    		return;
-    	}
+        
+    	if(!matches || matches.length !== outputs.length) 
+            throw 'Matches length exception';
     
     	// parse each match and update the output date object
     	for(i = 0; i < outputs.length; i++)
     	{
-    		if(outputs[i] !== '')
-    		{
-    			switch(outputs[i])
-    			{
-    				case 'yyyy':
-    				case 'yyy':
-    					output.setYear(_.parseInt(matches[i]));
-    					break;
-    
-    				case 'yy':
-    					output.setYear(2000 + _.parseInt(matches[i]));
-    					break;
-    
-    				case 'MM':
-    				case 'M':
-    					output.setMonth(_.parseInt(matches[i]) - 1);
-    					break;
-    
-    				case 'dd':
-    				case 'd':
-    					output.setDate(_.parseInt(matches[i]));
-    					break;
-    
-    				case 'hh':
-    				case 'h':
-    				case 'HH':
-    				case 'H':
-    					output.setHours(_.parseInt(matches[i]));
-    					break;
-    
-    				case 'mm':
-    				case 'm':
-    					output.setMinutes(_.parseInt(matches[i]));
-    					break;
-    
-    				case 'ss':
-    				case 's':
-    					output.setSeconds(_.parseInt(matches[i]));
-    					break;
-    
-    				case 'zzz':
-    				case 'zz':
-    				case 'z':
-    					output.setMilliseconds(_.parseInt(matches[i]));
-    					break;
-    
-    				case 'AP':
-    				case 'A':
-    				case 'ap':
-    				case 'a':
-    					if((matches[i] === 'PM' || matches[i] === 'pm') && (output.getHours() < 12))
-    					{
-    						output.setHours(output.getHours() + 12);
-    					}
-    
-    					if((matches[i] === 'AM' || matches[i] === 'am') && (output.getHours() === 12))
-    					{
-    						output.setHours(0);
-    					}
-    					break;
-    			}
-    		}
+			switch(outputs[i])
+			{
+				case 'yyyy':
+				case 'yyy':
+					output.setYear(_.parseInt(matches[i]));
+					break;
+
+				case 'yy':
+					output.setYear(2000 + _.parseInt(matches[i]));
+					break;
+
+				case 'MM':
+				case 'M':
+					output.setMonth(_.parseInt(matches[i]) - 1);
+					break;
+
+				case 'dd':
+				case 'd':
+					output.setDate(_.parseInt(matches[i]));
+					break;
+
+				case 'hh':
+				case 'h':
+				case 'HH':
+				case 'H':
+					output.setHours(_.parseInt(matches[i]));
+					break;
+
+				case 'mm':
+				case 'm':
+					output.setMinutes(_.parseInt(matches[i]));
+					break;
+
+				case 'ss':
+				case 's':
+					output.setSeconds(_.parseInt(matches[i]));
+					break;
+
+				case 'zzz':
+				case 'zz':
+				case 'z':
+					output.setMilliseconds(_.parseInt(matches[i]));
+					break;
+
+				case 'AP':
+				case 'A':
+				case 'ap':
+				case 'a':
+					if((matches[i].toLowerCase() === 'pm') && (output.getHours() < 12))
+					{
+						output.setHours(output.getHours() + 12);
+					}
+
+					if((matches[i].toLowerCase() === 'am') && (output.getHours() === 12))
+					{
+						output.setHours(0);
+					}
+					break;
+			}
     	}
     
     	return output;
