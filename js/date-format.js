@@ -172,9 +172,9 @@
             'a':    '([ap][m])',
             'AP':   '([AP][M])',
             'A':    '([AP][M])'
-    };
+        };
     
-    	var _ = Date.parseLogic;
+        function toInt(v) { return parseInt(v, 10); }
     
     	// parse the input format, char by char
     	var regex = "";
@@ -217,44 +217,44 @@
 			{
 				case 'yyyy':
 				case 'yyy':
-					output.setYear(_.parseInt(matches[i]));
+					output.setYear(toInt(matches[i]));
 					break;
 
 				case 'yy':
-					output.setYear(2000 + _.parseInt(matches[i]));
+					output.setYear(2000 + toInt(matches[i]));
 					break;
 
 				case 'MM':
 				case 'M':
-					output.setMonth(_.parseInt(matches[i]) - 1);
+					output.setMonth(toInt(matches[i]) - 1);
 					break;
 
 				case 'dd':
 				case 'd':
-					output.setDate(_.parseInt(matches[i]));
+					output.setDate(toInt(matches[i]));
 					break;
 
 				case 'hh':
 				case 'h':
 				case 'HH':
 				case 'H':
-					output.setHours(_.parseInt(matches[i]));
+					output.setHours(toInt(matches[i]));
 					break;
 
 				case 'mm':
 				case 'm':
-					output.setMinutes(_.parseInt(matches[i]));
+					output.setMinutes(toInt(matches[i]));
 					break;
 
 				case 'ss':
 				case 's':
-					output.setSeconds(_.parseInt(matches[i]));
+					output.setSeconds(toInt(matches[i]));
 					break;
 
 				case 'zzz':
 				case 'zz':
 				case 'z':
-					output.setMilliseconds(_.parseInt(matches[i]));
+					output.setMilliseconds(toInt(matches[i]));
 					break;
 
 				case 'AP':
@@ -275,33 +275,6 @@
     	}
     
     	return output;
-    };
-    
-    // this is the parse logic helper object that contains the helper functions
-    Date.parseLogic = 
-    {
-    	unpad: function (value)
-    	{
-    		var output = value;
-    
-    		while(output.length > 1)
-    		{
-    			if(output[0] === '0')
-    			{
-    				output = output.substring(1, output.length);
-    			}
-    			else
-    			{
-    				break;
-    			}
-    		}
-    
-    		return output;
-    	},
-    	parseInt: function (value)
-    	{
-    		return parseInt(this.unpad(value), 10);
-    	}
     };
     
     // add a member "from" function which will return the date object, created
