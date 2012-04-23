@@ -32,68 +32,65 @@
         }
         
         // get the helper functions object
-    	var formatLogic = Date.formatLogic;
+        var formatLogic = Date.formatLogic;
     
-    	// check if the AM/PM option is used
-    	var isAmPm		= (format.indexOf("a") !== -1) || (format.indexOf("A") !== -1);
+        // check if the AM/PM option is used
+        var isAmPm		= format.toLowerCase().indexOf("a") !== -1;
     
-    	// prepare all the parts of the date that can be used in the format
-    	var parts		= [];
-    	parts['d']		= date.getDate();
-    	parts['dd']		= formatLogic.pad(parts['d'], 2);
-    	parts['ddd']	= formatLogic.i18n.shortDayNames[date.getDay()];
-    	parts['dddd']	= formatLogic.i18n.dayNames[date.getDay()];
-    	parts['M']		= date.getMonth() + 1;
-    	parts['MM']		= formatLogic.pad(parts['M'], 2);
-    	parts['MMM']	= formatLogic.i18n.shortMonthNames[parts['M'] - 1];
-    	parts['MMMM']	= formatLogic.i18n.monthNames[parts['M'] - 1];
-    	parts['yyyy']	= date.getFullYear();
-    	parts['yyy']	= formatLogic.pad(parts['yyyy'], 2) + 'y';
-    	parts['yy']		= formatLogic.pad(parts['yyyy'], 2);
-    	parts['y']		= 'y';
-    	parts['H']		= date.getHours();
-    	parts['hh']		= formatLogic.pad(isAmPm ? formatLogic.convertTo12Hour(parts['H']) : parts['H'], 2);
-    	parts['h']		= isAmPm ? formatLogic.convertTo12Hour(parts['H']) : parts['H'];
-    	parts['HH']		= formatLogic.pad(parts['H'], 2);
-    	parts['m']		= date.getMinutes();
-    	parts['mm']		= formatLogic.pad(parts['m'], 2);
-    	parts['s']		= date.getSeconds();
-    	parts['ss']		= formatLogic.pad(parts['s'], 2);
-    	parts['z']		= date.getMilliseconds();
-    	parts['zz']		= parts['z'] + 'z';
-    	parts['zzz']	= formatLogic.pad(parts['z'], 3);
-    	parts['ap']		= parts['H'] < 12 ? 'am' : 'pm';
-    	parts['a']		= parts['H'] < 12 ? 'am' : 'pm';
-    	parts['AP']		= parts['H'] < 12 ? 'AM' : 'PM';
-    	parts['A']		= parts['H'] < 12 ? 'AM' : 'PM';
+        // prepare all the parts of the date that can be used in the format
+        var parts		= {};
+        parts['d']		= date.getDate();
+        parts['dd']		= formatLogic.pad(parts['d'], 2);
+        parts['ddd']	= formatLogic.i18n.shortDayNames[date.getDay()];
+        parts['dddd']	= formatLogic.i18n.dayNames[date.getDay()];
+        parts['M']		= date.getMonth() + 1;
+        parts['MM']		= formatLogic.pad(parts['M'], 2);
+        parts['MMM']	= formatLogic.i18n.shortMonthNames[parts['M'] - 1];
+        parts['MMMM']	= formatLogic.i18n.monthNames[parts['M'] - 1];
+        parts['yyyy']	= date.getFullYear();
+        parts['yyy']	= formatLogic.pad(parts['yyyy'], 2) + 'y';
+        parts['yy']		= formatLogic.pad(parts['yyyy'], 2);
+        parts['y']		= 'y';
+        parts['H']		= date.getHours();
+        parts['hh']		= formatLogic.pad(isAmPm ? formatLogic.convertTo12Hour(parts['H']) : parts['H'], 2);
+        parts['h']		= isAmPm ? formatLogic.convertTo12Hour(parts['H']) : parts['H'];
+        parts['HH']		= formatLogic.pad(parts['H'], 2);
+        parts['m']		= date.getMinutes();
+        parts['mm']		= formatLogic.pad(parts['m'], 2);
+        parts['s']		= date.getSeconds();
+        parts['ss']		= formatLogic.pad(parts['s'], 2);
+        parts['z']		= date.getMilliseconds();
+        parts['zz']		= parts['z'] + 'z';
+        parts['zzz']	= formatLogic.pad(parts['z'], 3);
+        parts['ap']		= parts['H'] < 12 ? 'am' : 'pm';
+        parts['a']		= parts['H'] < 12 ? 'am' : 'pm';
+        parts['AP']		= parts['H'] < 12 ? 'AM' : 'PM';
+        parts['A']		= parts['H'] < 12 ? 'AM' : 'PM';
     
-    	// parse the input format, char by char
-    	var i = 0;
-    	var output = "";
-    	var token = "";
-    	while (i < format.length)
-    	{
-    		token = format.charAt(i);
-    		
-    		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== undefined)
-    		{
-    			token += format.charAt(++i);
-    		}
+        // parse the input format, char by char
+        var output = "";
+        var token = "";
+        for(var i = 0; i < format.length; i++)
+        {
+            token = format.charAt(i);
+            
+            while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== undefined)
+            {
+                token += format.charAt(++i);
+            }
+            
+            if (parts[token] !== undefined)
+            {
+                output += parts[token];
+            }
+            else
+            {
+                output += token;
+            }
+        }
     
-    		if (parts[token] !== undefined)
-    		{
-    			output += parts[token];
-    		}
-    		else
-    		{
-    			output += token;
-    		}
-    
-    		i++;
-    	}
-    
-    	// return the parsed result
-    	return output;
+        // return the parsed result
+        return output;
     };
     
     // this is the format logic helper object that contains the helper functions
@@ -143,11 +140,7 @@
     
     // add a member "format" function which will return the string representation
     // of the current object formatted using the provided format string
-    Date.prototype.toFormattedString = function (format)
-    {
-    	return Date.format(this, format);
-    };
-    
+    Date.prototype.toFormattedString = Date.format; // Deprecated
     Date.prototype.format = Date.format;
     
     // extend the Javascript Date class with the "parseFormatted" static function which
@@ -155,44 +148,44 @@
     Date.parseFormatted = function (value, format)
     {
     	var output		= new Date(2000, 0, 1);
-    	var parts		= [];
-    	parts['d']		= '([0-9][0-9]?)';
-    	parts['dd']		= '([0-9][0-9])';
-    //	parts['ddd']	= NOT SUPPORTED;
-    //	parts['dddd']	= NOT SUPPORTED;
-    	parts['M']		= '([0-9][0-9]?)';
-    	parts['MM']		= '([0-9][0-9])';
-    //	parts['MMM']	= NOT SUPPORTED;
-    //	parts['MMMM']	= NOT SUPPORTED;
-    	parts['yyyy']	= '([0-9][0-9][0-9][0-9])';
-    	parts['yyy']	= '([0-9][0-9])[y]';
-    	parts['yy']		= '([0-9][0-9])';
-    	parts['H']		= '([0-9][0-9]?)';
-    	parts['hh']		= '([0-9][0-9])';
-    	parts['h']		= '([0-9][0-9]?)';
-    	parts['HH']		= '([0-9][0-9])';
-    	parts['m']		= '([0-9][0-9]?)';
-    	parts['mm']		= '([0-9][0-9])';
-    	parts['s']		= '([0-9][0-9]?)';
-    	parts['ss']		= '([0-9][0-9])';
-    	parts['z']		= '([0-9][0-9]?[0-9]?)';
-    	parts['zz']		= '([0-9][0-9]?[0-9]?)[z]';
-    	parts['zzz']	= '([0-9][0-9][0-9])';
-    	parts['ap']		= '([ap][m])';
-    	parts['a']		= '([ap][m])';
-    	parts['AP']		= '([AP][M])';
-    	parts['A']		= '([AP][M])';
+    	var parts		= {
+            'd':    '([0-9][0-9]?)',
+            'dd':   '([0-9][0-9])',
+//          'ddd':  'NOT SUPPORTED',
+//          'dddd': 'NOT SUPPORTED',
+            'M':    '([0-9][0-9]?)',
+            'MM':   '([0-9][0-9])',
+//          'MMM':  'NOT SUPPORTED',
+//          'MMMM': 'NOT SUPPORTED',
+            'yyyy': '([0-9][0-9][0-9][0-9])',
+            'yyy':  '([0-9][0-9])[y]',
+            'yy':   '([0-9][0-9])',
+            'H':    '([0-9][0-9]?)',
+            'hh':   '([0-9][0-9])',
+            'h':    '([0-9][0-9]?)',
+            'HH':   '([0-9][0-9])',
+            'm':    '([0-9][0-9]?)',
+            'mm':   '([0-9][0-9])',
+            's':    '([0-9][0-9]?)',
+            'ss':   '([0-9][0-9])',
+            'z':    '([0-9][0-9]?[0-9]?)',
+            'zz':   '([0-9][0-9]?[0-9]?)[z]',
+            'zzz':  '([0-9][0-9][0-9])',
+            'ap':   '([ap][m])',
+            'a':    '([ap][m])',
+            'AP':   '([AP][M])',
+            'A':    '([AP][M])'
+    };
     
     	var _ = Date.parseLogic;
     
     	// parse the input format, char by char
-    	var i = 0;
     	var regex = "";
-    	var outputs = new Array("");
+    	var outputs = [];
     	var token = "";
     
     	// parse the format to get the extraction regex
-    	while (i < format.length)
+    	for (var i=0; i < format.length; i++)
     	{
     		token = format.charAt(i);
     		while((i + 1 < format.length) && parts[token + format.charAt(i + 1)] !== undefined)
@@ -203,14 +196,12 @@
     		if (parts[token] !== undefined)
     		{
     			regex += parts[token];
-    			outputs[outputs.length] = token;
+    			outputs.push(token);
     		}
     		else
     		{
     			regex += token;
     		}
-    
-    		i++;
     	}
     
     	// extract matches
