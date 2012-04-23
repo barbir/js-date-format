@@ -97,45 +97,42 @@
     // and the internationalization settings that can be overridden
     Date.formatLogic = 
     {
-    	// left-pad the provided number with zeros
-    	pad: function (value, digits)
-    	{
-    		var max = 1;
-    		var zeros = "";
+        // left-pad the provided number with zeros
+        pad: function (value, digits)
+        {
+            var max = 1;
+            var zeros = "";
+            
+            if(digits < 1) return "";
+            
+            for(var i = 0; i < digits; i++)
+            {
+                max *= 10;
+                zeros += "0";
+            }
     
-    		if(digits < 1)
-    		{
-    			return "";
-    		}
+            var output = value;
+            
+            output = zeros + value;
+            output = output.substring(output.length - digits);
+            
+            return output;
+        },
     
-    		for(var i = 0; i < digits; i++)
-    		{
-    			max *= 10;
-    			zeros += "0";
-    		}
+        // convert the 24 hour style value to a 12 hour style value
+        convertTo12Hour: function (value)
+        {
+            return value % 12 === 0 ? 12 : value % 12;
+        },
     
-    		var output = value;
-    
-    		output = zeros + value;
-    		output = output.substring(output.length - digits);
-    
-    		return output;
-    	},
-    
-    	// convert the 24 hour style value to a 12 hour style value
-    	convertTo12Hour: function (value)
-    	{
-    		return value % 12 === 0 ? 12 : value % 12;
-    	},
-    
-    	// internationalization settings
-    	i18n:
-    	{
-    		dayNames:			['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-    		shortDayNames:		['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-    		monthNames:			['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    		shortMonthNames:	['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    	}
+        // internationalization settings
+        i18n:
+        {
+            dayNames:			['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            shortDayNames:		['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            monthNames:			['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            shortMonthNames:	['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        }
     };
     
     // add a member "format" function which will return the string representation
@@ -207,10 +204,11 @@
     	// extract matches
     	var r = new RegExp(regex);
     	var matches = value.match(r);
+        matches.shift();
     
     	if(matches === undefined || matches.length !== outputs.length)
     	{
-    		return undefined;
+    		return;
     	}
     
     	// parse each match and update the output date object
