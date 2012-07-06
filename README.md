@@ -1,4 +1,4 @@
-Javascript Date Format Patch 0.9.11
+Javascript Date Format Patch 0.9.12
 ================================================================================================
 
 About

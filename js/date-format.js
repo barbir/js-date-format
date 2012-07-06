@@ -1,8 +1,8 @@
 /*
  * ----------------------------------------------------------------------------
  * Package:     JS Date Format Patch
- * Version:     0.9.11
- * Date:        2012-04-12
+ * Version:     0.9.12
+ * Date:        2012-07-06
  * Description: In lack of decent formatting ability of Javascript Date object,
  *              I have created this "patch" for the Date object which will add 
  *              "Date.format(dateObject, format)" static function, and the 
@@ -20,6 +20,8 @@
  * Dual licensed under the MIT and GPL licenses.
  * ----------------------------------------------------------------------------
  */
+
+(function(){
 
 // extend the Javascript Date class with the "format" static function which will format
 // the provided date object using the provided format string
@@ -318,3 +320,5 @@ Date.prototype.fromFormattedString = function(value, format)
 	this.setTime(Date.parseFormatted(value, format).getTime());
 	return this;
 };
+
+})();
