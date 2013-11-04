@@ -1,0 +1,22 @@
+{
+  "name": "js-date-format",
+  "version": "0.9.12",
+  "description": "A patch for JavaScript Date object which adds the format functionality when converting to string",
+  "main": "js/date-format.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/barbir/js-date-format.git"
+  },
+  "keywords": [
+    "date"
+  ],
+  "author": "Miljenko Barbir",
+  "license": "MIT & GPL",
+  "bugs": {
+    "url": "https://github.com/barbir/js-date-format/issues"
+  },
+  "homepage": "https://github.com/barbir/js-date-format"
+}
